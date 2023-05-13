@@ -1,7 +1,10 @@
 const express = require('express');
 const bodyParser = require('body-parser');
-
 const app = express();
+
+var items = [];
+
+app.use(bodyParser.urlencoded({extended: true}));
 
 app.set('view engine', 'ejs');
 app.set('views', __dirname + '/views');
@@ -10,6 +13,7 @@ app.get("/", (req, res) => {
 	var date = new Date();
 	var today = date.getDay();
   var day ="";
+  var mood = "";
 
   switch(today){
     case 0:
@@ -17,6 +21,7 @@ app.get("/", (req, res) => {
       break;
     case 1:
       day = "Monday";
+
       break;
     case 2:
       day = "Tuesday";
@@ -36,11 +41,44 @@ app.get("/", (req, res) => {
     default:
       day="Error: Invalid weekday."
   }
+  
+  mood= (day === (0 || 6))? "happy":"sad";
 
-  res.render('index', {day: day});
+  var options = {
+    weekday: 'long',
+    day: 'numeric',
+    month: 'long',
+    year: 'numeric'
+  };
+  
+  var dateformat = date.toLocaleDateString("en-US", options);
+  
+  res.render('index', {day, today, mood, dateformat});
 
 });
 
+app.get('/list', (req, res) => {
+
+  var date = new Date();
+
+  var options = {
+    weekday: 'long',
+    day: 'numeric',
+    month: 'long',
+    year: 'numeric'
+  };
+
+  var dateformat = date.toLocaleDateString("en-US", options);
+  
+  res.render('list', {dateformat, items});
+});
+
+app.post('/list', (req, res) => {
+  item = req.body.item;
+  items.push(item);
+
+  res.redirect('/list');
+})
 
 
 app.listen(3000, () => console.log("Server running on port 3000"));

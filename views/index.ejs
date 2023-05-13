@@ -4,10 +4,18 @@
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>TODO List</title>
+  <title>Tell Date</title>
 </head>
 <body style="text-align: center;">
   <h1>Heyy! There</h1>
-  <h2>I'm proud to announce to you that it's <%= day %> today</h2>
+  <br>
+  <% if (today === (0 || 6)) { %>
+    <h2>I'm <%= mood %> to announce to you that it's <%= day %> today</h2>
+    <h2>Enjoy your weekends 🥂🥳</h2>
+    <% } else { %>
+    <h2>I'm <%= mood %> to announce to you that it's <%= day %> today</h2>
+    <h2>Have a nice day at work 🥹</h2>
+  <% }%>
+  <h3>Date: <%= dateformat %></h3>
 </body>
 </html>
