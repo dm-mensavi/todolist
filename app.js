@@ -11,6 +11,7 @@ app.use(express.static("public"));
 app.set('view engine', 'ejs');
 app.set('views', __dirname + '/views');
 
+//# initial todo list
 app.get("/", (req, res) => {
 	var date = new Date();
 	var today = date.getDay();
@@ -59,6 +60,7 @@ app.get("/", (req, res) => {
 
 });
 
+//# todo list from instructor
 app.get('/list', (req, res) => {
 
   var date = new Date();
@@ -78,9 +80,32 @@ app.get('/list', (req, res) => {
 app.post('/list', (req, res) => {
   item = req.body.item;
   items.push(item);
-
+  
   res.redirect('/list');
 })
 
+//#Customised todo list
+app.get('/mytodolist', (req, res) => {
+
+  var date = new Date();
+
+  var options = {
+    weekday: 'long',
+    day: 'numeric',
+    month: 'long',
+    year: 'numeric'
+  };
+
+  var dateformat = date.toLocaleDateString("en-US", options);
+  
+  res.render('mytodolist', {dateformat, items});
+});
+
+app.post('/mytodolist', (req, res) => {
+  item = req.body.item;
+  items.push(item);
+
+  res.redirect('/mytodolist');
+})
 
 app.listen(3000, () => console.log("Server running on port 3000"));
