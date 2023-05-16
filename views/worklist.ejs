@@ -1,0 +1,22 @@
+<%- include('header'); %>
+  <div class="box" id="heading">
+    <h1>Work List, <%= dateformat %></h1>
+    </div>
+    
+    <div class="box">
+    
+      <% for( let i = 0; i < jobs.length; i++ ) { %>
+      <div class="item">
+        <input type="checkbox">
+        <h3 id="<%= itemIndex %>"><%= jobs[i] %></h3>
+        <button id="deletebtn" onclick="myFunction()">❌</button>
+      </div>
+        <% } %>
+    
+      <form class="item" action="/worklist" method="post">
+        <input type="text" name="job" placeholder="Enter job..." autocomplete="off">
+        <button type="submit">+</button>
+      </form>
+    </div>
+
+  <%- include('footer'); %>
