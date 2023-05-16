@@ -1,9 +1,11 @@
 const express = require('express');
 const bodyParser = require('body-parser');
+const dategenerator = require(__dirname+ '/date.js');
 const app = express();
 
 
 var items = [];
+var jobs = [];
 
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(express.static("public")); 
@@ -24,11 +26,11 @@ app.get("/", (req, res) => {
       break;
     case 1:
       day = "Monday";
-
+      
       break;
-    case 2:
-      day = "Tuesday";
-      break;
+      case 2:
+        day = "Tuesday";
+        break;
     case 3:
       day = "Wednesday";
       break;
@@ -41,7 +43,7 @@ app.get("/", (req, res) => {
     case 6:
       day = "Saturday";
       break;
-    default:
+      default:
       day="Error: Invalid weekday."
   }
   
@@ -56,6 +58,7 @@ app.get("/", (req, res) => {
   
   var dateformat = date.toLocaleDateString("en-US", options);
   
+  
   res.render('index', {day, today, mood, dateformat});
 
 });
@@ -63,18 +66,10 @@ app.get("/", (req, res) => {
 //# todo list from instructor
 app.get('/list', (req, res) => {
 
-  var date = new Date();
 
-  var options = {
-    weekday: 'long',
-    day: 'numeric',
-    month: 'long',
-    year: 'numeric'
-  };
+  var gdate = dategenerator.getfulldate();
 
-  var dateformat = date.toLocaleDateString("en-US", options);
-  
-  res.render('list', {dateformat, items});
+  res.render('list', {gdate, items});
 });
 
 app.post('/list', (req, res) => {
@@ -84,28 +79,28 @@ app.post('/list', (req, res) => {
   res.redirect('/list');
 })
 
-//#Customised todo list
-app.get('/mytodolist', (req, res) => {
+//#Customised work list
 
-  var date = new Date();
 
-  var options = {
-    weekday: 'long',
-    day: 'numeric',
-    month: 'long',
-    year: 'numeric'
-  };
-
-  var dateformat = date.toLocaleDateString("en-US", options);
+app.get('/worklist', (req, res) => {
   
-  res.render('mytodolist', {dateformat, items});
+  var date = new Date();
+  
+  var options = {
+    month: 'long',
+    day: 'numeric',
+  };
+  
+  var dateformat = date.toLocaleDateString("en-US", options);
+  var itemIndex = jobs.indexOf(req.body.job);
+  
+  res.render('worklist', {dateformat, jobs, itemIndex});
 });
 
-app.post('/mytodolist', (req, res) => {
-  item = req.body.item;
-  items.push(item);
+app.post('/worklist', (req, res) => {
+  jobs.push(req.body.job);
 
-  res.redirect('/mytodolist');
+  res.redirect('/worklist');
 })
 
 app.listen(3000, () => console.log("Server running on port 3000"));
